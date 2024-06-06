@@ -1,0 +1,78 @@
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #e0e0e0; /* Light gray background */
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px; /* Increased padding */
+  background-color: #fff; /* White background */
+  border: 3px solid #333; /* Dark border */
+  box-shadow: 10px 10px 0 #333; /* Dark shadow */
+  font-family: "Arial", sans-serif; /* Use Arial font */
+  border-radius: 10px; /* Rounded corners */
+  position: relative; /* Set the position to relative */
+}
+
+.title {
+  font-size: 2.5rem; /* Increased font size */
+  margin-bottom: 2rem;
+  background-color: #333; /* Dark background */
+  color: #fff; /* White text color */
+  padding: 20px 40px; /* Increased padding */
+  border: 3px solid #333; /* Dark border */
+  box-shadow: 10px 10px 0 #333; /* Dark shadow */
+  font-family: "Arial", sans-serif; /* Use Arial font */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.file-input {
+  margin-bottom: 60px; /* Increased margin */
+  font-size: 1.2rem; /* Increased font size */
+  background-color: #fff; /* White background */
+  padding: 10px 20px; /* Increased padding */
+  border: 2px solid #333; /* Dark border */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.select-container {
+  display: flex; /* Display items horizontally */
+  flex-direction: row;
+  align-items: center; /* Center vertically */
+  margin-bottom: 160px;
+}
+
+.sheet-dropdown {
+  font-size: 1.2rem; /* Font size */
+  padding: 10px 20px; /* Padding */
+  border: 2px solid #333; /* Dark border */
+  border-radius: 5px; /* Rounded corners */
+  margin-left: 12px;
+}
+
+.upload-button {
+  position: absolute; /* Set the position to absolute */
+  bottom: 20px; /* Adjust the distance from the bottom */
+  right: 40px; /* Adjust the distance from the right */
+  background-color: #333; /* Dark background */
+  color: #fff; /* White text color */
+  padding: 15px 30px; /* Increased padding */
+  border: 3px solid #333; /* Dark border */
+  box-shadow: 10px 10px 0 #333; /* Dark shadow */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.5rem; /* Increased font size */
+  font-family: "Arial", sans-serif; /* Use Arial font */
+  border-radius: 5px; /* Rounded corners */
+  z-index: 1; /* Ensure the button is above other content */
+}
+
+.upload-button:hover {
+  box-shadow: 2px 2px 0 #333; /* Dark shadow */
+  transform: translateY(-2px);
+}
