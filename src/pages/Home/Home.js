@@ -65,7 +65,7 @@ function Home() {
             // Log the data from all sheets
             console.log("All Sheets Data:", allSheetsData);
 
-            await axios.post("http://localhost:3001/upload", {
+            await axios.post("https://leads-data-backend.onrender.com/upload", {
               data: allSheetsData,
             });
             setMessage("All sheets data uploaded successfully");
