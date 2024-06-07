@@ -76,3 +76,23 @@
   box-shadow: 2px 2px 0 #333; /* Dark shadow */
   transform: translateY(-2px);
 }
+
+.message {
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.message.success {
+  background-color: #4caf50; /* Green background */
+  color: white; /* White text */
+}
+
+.message.error {
+  background-color: #f44336; /* Red background */
+  color: white; /* White text */
+}

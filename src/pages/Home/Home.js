@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import "./Home.css";
 import * as XLSX from "xlsx";
+import axios from "axios";
 
 function Home() {
   const [sheets, setSheets] = useState([]);
   const [selectedSheet, setSelectedSheet] = useState(null);
   const [file, setFile] = useState(null);
+  const [message, setMessage] = useState(""); // State to hold the message
+  const [messageType, setMessageType] = useState(""); // State to hold message type (success or error)
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -25,17 +28,84 @@ function Home() {
     setSelectedSheet(event.target.value);
   };
 
-  const handleFileUpload = () => {
-    if (file && selectedSheet) {
+  const handleFileUpload = async () => {
+    if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
-        const selectedSheetData = XLSX.utils.sheet_to_json(
-          workbook.Sheets[selectedSheet]
-        );
-        console.log(selectedSheetData);
-        // You can send selectedSheetData to the backend for further processing
+
+        try {
+          if (selectedSheet === "ALL_SHEETS") {
+            const allSheetsData = {};
+            sheets.forEach((sheet) => {
+              const sheetData = XLSX.utils.sheet_to_json(
+                workbook.Sheets[sheet],
+                {
+                  raw: false,
+                  dateNF: "DD-MM-YYYY",
+                }
+              );
+
+              // Convert serial numbers to date strings
+              sheetData.forEach((row) => {
+                Object.keys(row).forEach((key) => {
+                  if (
+                    typeof row[key] === "number" &&
+                    XLSX.SSF.parse_date_code(row[key])
+                  ) {
+                    row[key] = XLSX.SSF.parse_date_code(row[key]);
+                  }
+                });
+              });
+
+              allSheetsData[sheet] = sheetData;
+            });
+
+            // Log the data from all sheets
+            console.log("All Sheets Data:", allSheetsData);
+
+            await axios.post("http://localhost:3001/upload", {
+              data: allSheetsData,
+            });
+            setMessage("All sheets data uploaded successfully");
+            setMessageType("success");
+          } else {
+            const selectedSheetData = XLSX.utils.sheet_to_json(
+              workbook.Sheets[selectedSheet],
+              {
+                raw: false,
+                dateNF: "DD-MM-YYYY",
+              }
+            );
+
+            // Convert serial numbers to date strings
+            selectedSheetData.forEach((row) => {
+              Object.keys(row).forEach((key) => {
+                if (
+                  typeof row[key] === "number" &&
+                  XLSX.SSF.parse_date_code(row[key])
+                ) {
+                  row[key] = XLSX.SSF.parse_date_code(row[key]);
+                }
+              });
+            });
+
+            console.log("Selected Sheet Data:", selectedSheetData);
+
+            await axios.post("http://localhost:3001/upload", {
+              data: { [selectedSheet]: selectedSheetData },
+            });
+            setMessage(
+              `Data from sheet '${selectedSheet}' uploaded successfully`
+            );
+            setMessageType("success");
+          }
+        } catch (error) {
+          console.error("Error uploading data", error);
+          setMessage("Error uploading data");
+          setMessageType("error");
+        }
       };
       reader.readAsArrayBuffer(file);
     }
@@ -56,6 +126,7 @@ function Home() {
             <h2>Select Sheet :</h2>
             <select onChange={handleSheetSelect} className="sheet-dropdown">
               <option value="">Select a sheet</option>
+              <option value="ALL_SHEETS">All Sheets</option>
               {sheets.map((sheet, index) => (
                 <option key={index} value={sheet}>
                   {sheet}
@@ -67,6 +138,8 @@ function Home() {
         <button onClick={handleFileUpload} className="upload-button">
           Upload
         </button>
+        {message && <p className={`message ${messageType}`}>{message}</p>}{" "}
+        {/* Display message */}
       </div>
     </div>
   );
